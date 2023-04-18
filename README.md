@@ -1,4 +1,6 @@
-# Limonade Project
+
+
+# Limonade Project ![Lemon slice - project logo](./app/src/main/res/mipmap-hdpi/ic_launcher.png) 
 Day to day data tracking for personal improvement, health diagnosis or self-care.
 
 ## Coding detail
