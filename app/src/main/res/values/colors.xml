@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="lemon_zeste">#FDD805</color>
+    <color name="vibrant_yellow">#FFF65D</color>
+    <color name="lemon_yellow">#fffc7f</color>
+    <color name="lemon_yellow_green">#e6ff6e</color>
+    <color name="lemon_green">#9FD334</color>
+    <color name="vibrant_green">#7EE325</color>
+    <color name="diluted_yellow">#FBF8CB</color>
+    <color name="glass_grey">#F2F5FA</color>
+
+</resources>
