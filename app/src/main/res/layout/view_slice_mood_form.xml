@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.silwek.limonade.view.slices.mood.MoodSliceFormView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Mon humeur"
+        android:textStyle="bold" />
+
+    <com.google.android.material.button.MaterialButtonToggleGroup
+        android:id="@+id/mood_scale"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="12dp"
+        app:singleSelection="true">
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mood1"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="😵‍💫" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mood2"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="😞" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mood3"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="😐" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mood4"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="🙂" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/mood5"
+            style="?attr/materialButtonOutlinedStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="🤪" />
+
+    </com.google.android.material.button.MaterialButtonToggleGroup>
+
+
+</com.silwek.limonade.view.slices.mood.MoodSliceFormView>

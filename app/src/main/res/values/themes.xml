@@ -12,9 +12,6 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorSecondaryVariant</item>
         <!-- Customize your theme here. -->
-    </style>
-
-    <style name="Theme.Limonade.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
     </style>
