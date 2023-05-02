@@ -2,6 +2,7 @@ package com.silwek.limonade.view.slices
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import com.silwek.limonade.datasources.room.entities.SliceEntity
 import com.silwek.limonade.models.Slice
 import com.silwek.limonade.view.slices.base.SliceConfig
 import com.silwek.limonade.view.slices.base.SliceFormView
@@ -30,7 +31,16 @@ object SliceConfigHub {
         return configs.firstOrNull { it.key == slice.getSliceType() }
     }
 
+    fun getConfig(key: String): SliceConfig? {
+        return configs.firstOrNull { it.key == key }
+    }
+
     fun getFormView(inflater: LayoutInflater, parent: ViewGroup?, slice: Slice): SliceFormView? {
         return getConfig(slice)?.inflateFormView(inflater, parent)
+    }
+
+    fun fromEntityToModel(sliceEntity: SliceEntity): Slice? {
+        val config = getConfig(sliceEntity.key)
+        return config?.fromEntityToModel(sliceEntity)
     }
 }
