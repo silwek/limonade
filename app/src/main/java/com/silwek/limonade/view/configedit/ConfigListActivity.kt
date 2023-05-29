@@ -1,44 +1,47 @@
-package com.silwek.limonade.view.list
+package com.silwek.limonade.view.configedit
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.silwek.limonade.databinding.ActivityListBinding
-import com.silwek.limonade.models.DaySlices
+import com.silwek.limonade.databinding.ActivityConfigListBinding
+import com.silwek.limonade.models.SliceConfig
+import com.silwek.limonade.view.form.FormActivity
 import com.silwek.limonade.viewmodels.SliceConfigViewModel
-import com.silwek.limonade.viewmodels.SliceViewModel
 import com.silwek.limonade.viewmodels.getSliceConfigViewModel
-import com.silwek.limonade.viewmodels.getSliceViewModel
 
-class ListActivity : AppCompatActivity() {
+class ConfigListActivity : AppCompatActivity() {
 
-    private lateinit var binding: ActivityListBinding
-    private lateinit var adapter: DayListAdapter
-    private val slicesViewModel: SliceViewModel by lazy { getSliceViewModel() }
+    private lateinit var binding: ActivityConfigListBinding
+    private lateinit var adapter: ConfigListAdapter
     private val sliceConfigsViewModel: SliceConfigViewModel by lazy { getSliceConfigViewModel() }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        binding = ActivityListBinding.inflate(layoutInflater)
+        binding = ActivityConfigListBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        adapter = DayListAdapter(this)
+        adapter = ConfigListAdapter(this)
     }
 
     override fun onStart() {
         super.onStart()
-        binding.data.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
-        binding.data.adapter = adapter
-        slicesViewModel.dayslices.observe(this, this::onData)
+        binding.configs.layoutManager = LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false)
+        binding.configs.adapter = adapter
+        sliceConfigsViewModel.sliceConfigs.observe(this, this::onData)
+
+        binding.fab.setOnClickListener {
+            startActivity(Intent(this, ConfigEditActivity::class.java))
+        }
     }
 
     override fun onResume() {
         super.onResume()
-        slicesViewModel.loadAllSlices()
+        sliceConfigsViewModel.refreshConfigs()
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -51,10 +54,11 @@ class ListActivity : AppCompatActivity() {
         }
     }
 
-    private fun onData(daySlices: List<DaySlices>?) {
-        if (daySlices != null) {
-            adapter.daysSlices = daySlices.toList()
+    private fun onData(sliceConfigs: List<SliceConfig>?) {
+        if (sliceConfigs != null) {
+            adapter.sliceConfigs = sliceConfigs.toList()
             adapter.notifyDataSetChanged()
         }
     }
+
 }

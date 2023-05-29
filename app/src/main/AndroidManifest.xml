@@ -30,6 +30,9 @@
             android:label="@string/add_entry" />
         <activity android:name="com.silwek.limonade.view.list.ListActivity"
             android:label="Toutes les entrées"/>
+        <activity android:name="com.silwek.limonade.view.configedit.ConfigListActivity"
+            android:label="Paramètres des enregistrements" />
+        <activity android:name="com.silwek.limonade.view.configedit.ConfigEditActivity" />
     </application>
 
 </manifest>

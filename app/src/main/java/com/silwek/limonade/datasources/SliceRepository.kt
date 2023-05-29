@@ -5,7 +5,7 @@ import androidx.room.Room
 import com.silwek.limonade.datasources.room.RoomAppDatabase
 import com.silwek.limonade.datasources.room.entities.SliceEntity
 import com.silwek.limonade.models.Slice
-import com.silwek.limonade.view.slices.SliceConfigHub
+import com.silwek.limonade.models.SliceConfig
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import java.time.LocalDate
@@ -23,16 +23,18 @@ class SliceRoomRepository(context: Context) : SliceRepository {
     private val db = Room.databaseBuilder(
         context.applicationContext,
         RoomAppDatabase::class.java, "limonade-name"
-    ).build()
+    ).fallbackToDestructiveMigration().build()
     private val sliceDao by lazy { db.sliceDao() }
-
+    private val sliceConfigRoomRepository = SliceConfigRoomRepository(context)
 
     override suspend fun loadAllSlices(onSuccess: (List<Slice>) -> Unit) {
         withContext(Dispatchers.IO) {
             val slicesEntities = sliceDao.getAll()
-            val slices = slicesEntities.mapNotNull { SliceConfigHub.fromEntityToModel(it) }
             withContext(Dispatchers.Main) {
-                onSuccess(slices)
+                sliceConfigRoomRepository.loadAllConfig { configs ->
+                    val slices = slicesEntities.mapNotNull { fromEntityToModel(it, configs) }
+                    onSuccess(slices)
+                }
             }
         }
     }
@@ -40,9 +42,11 @@ class SliceRoomRepository(context: Context) : SliceRepository {
     override suspend fun loadSlices(day: LocalDate, onSuccess: (List<Slice>) -> Unit) {
         withContext(Dispatchers.IO) {
             val slicesEntities = sliceDao.getAllForDay(day)
-            val slices = slicesEntities.mapNotNull { SliceConfigHub.fromEntityToModel(it) }
             withContext(Dispatchers.Main) {
-                onSuccess(slices)
+                sliceConfigRoomRepository.loadAllConfig { configs ->
+                    val slices = slicesEntities.mapNotNull { fromEntityToModel(it, configs) }
+                    onSuccess(slices)
+                }
             }
         }
     }
@@ -75,6 +79,11 @@ class SliceRoomRepository(context: Context) : SliceRepository {
                 onSuccess()
             }
         }
+    }
+
+    private fun fromEntityToModel(sliceEntity: SliceEntity, configs: List<SliceConfig>): Slice? {
+        val config = configs.firstOrNull { it.key == sliceEntity.key }
+        return config?.getViewTypeBuilder()?.fromEntityToModel(sliceEntity)
     }
 
 }

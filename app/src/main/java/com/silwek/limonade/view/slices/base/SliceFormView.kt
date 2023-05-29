@@ -6,7 +6,7 @@ import android.widget.LinearLayout
 import com.silwek.limonade.models.Slice
 import java.time.LocalDate
 
-open class SliceFormView @JvmOverloads constructor(
+abstract class SliceFormView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null
 ) : LinearLayout(context, attrs) {
     init {
@@ -14,14 +14,13 @@ open class SliceFormView @JvmOverloads constructor(
     }
 
     var day: LocalDate? = null
-    var onUpdate:((Slice)->Unit)?=null
+    var viewType: String? = null
+    var onUpdate: ((Slice) -> Unit)? = null
 
-    open fun setSlice(slice: Slice?) {
-        TODO("Not yet implemented")
-    }
+    abstract fun setLabel(label: String)
 
-    open fun getSlice(): Slice {
-        TODO("Not yet implemented")
-    }
+    abstract fun setSlice(slice: Slice?)
+
+    abstract fun getSlice(): Slice
 
 }

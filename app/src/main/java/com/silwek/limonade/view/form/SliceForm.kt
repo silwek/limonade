@@ -7,7 +7,7 @@ import android.widget.LinearLayout
 import android.widget.ScrollView
 import androidx.core.view.children
 import com.silwek.limonade.models.Slice
-import com.silwek.limonade.view.slices.base.SliceConfig
+import com.silwek.limonade.view.slices.base.BaseSliceType
 import com.silwek.limonade.view.slices.base.SliceFormView
 
 class SliceForm @JvmOverloads constructor(
@@ -21,15 +21,20 @@ class SliceForm @JvmOverloads constructor(
         sliceContainer = getChildAt(0) as LinearLayout?
     }
 
-    fun buildForm(configs: List<SliceConfig>) {
+    fun buildForm(sliceTypesConfig: List<BaseSliceType>) {
         if (sliceContainer == null) {
             sliceContainer = getChildAt(0) as LinearLayout?
         }
         val container = sliceContainer ?: return
         if (container.childCount > 0) return
         val layoutInflater = LayoutInflater.from(context)
-        configs.forEach { config ->
-            container.addView(config.inflateFormView(layoutInflater, container))
+        sliceTypesConfig.forEach { sliceTypes ->
+            container.addView(
+                sliceTypes.inflateFormView(
+                    layoutInflater,
+                    container
+                )
+            )
         }
     }
 

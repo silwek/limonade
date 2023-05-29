@@ -5,13 +5,20 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.silwek.limonade.datasources.SliceConfigRoomRepository
 import com.silwek.limonade.datasources.SliceRoomRepository
 import com.silwek.limonade.models.DaySlices
 import com.silwek.limonade.models.Slice
+import com.silwek.limonade.models.SliceConfig
 import kotlinx.coroutines.launch
 import java.time.LocalDate
 
 class SliceViewModel(context: Context) : ViewModel() {
+
+
+    private val configRepository = SliceConfigRoomRepository(context)
+    private val _sliceConfigs: MutableLiveData<List<SliceConfig>> = MutableLiveData()
+    val sliceConfigs: LiveData<List<SliceConfig>> = _sliceConfigs
 
     private val repository = SliceRoomRepository(context)
     private val _slices: MutableLiveData<MutableList<Slice>> = MutableLiveData()
@@ -19,6 +26,22 @@ class SliceViewModel(context: Context) : ViewModel() {
     private val _dayslices: MutableLiveData<MutableList<DaySlices>> = MutableLiveData()
     val dayslices: LiveData<MutableList<DaySlices>> = _dayslices
     var day: LocalDate = LocalDate.now()
+
+    fun refreshConfigs() {
+        viewModelScope.launch {
+            configRepository.loadAllConfig {
+                _sliceConfigs.value = it.toList()
+            }
+        }
+    }
+
+    fun getConfigForSlices(slices: List<Slice>): List<SliceConfig?> {
+        val configs = _sliceConfigs.value ?: emptyList()
+        return slices.map {
+            val key = it.getSliceType()
+            configs.firstOrNull { config -> config.key == key }
+        }
+    }
 
     fun loadSlices() {
         viewModelScope.launch {
@@ -29,7 +52,6 @@ class SliceViewModel(context: Context) : ViewModel() {
     }
 
     fun addSlices(slices: List<Slice>) {
-        //TODO check existing slice for each key to replace them
         viewModelScope.launch {
             repository.addSlices(slices) {
                 loadSlices()
@@ -55,7 +77,8 @@ class SliceViewModel(context: Context) : ViewModel() {
         }.map {
             DaySlices(
                 date = it.key,
-                slices = it.value
+                slices = it.value,
+                slicesConfigs = getConfigForSlices(it.value)
             )
         }.toMutableList()
     }

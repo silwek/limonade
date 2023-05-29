@@ -6,7 +6,7 @@ import android.util.Log
 import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import com.silwek.limonade.databinding.ActivityFormBinding
-import com.silwek.limonade.view.slices.SliceConfigHub
+import com.silwek.limonade.models.SliceConfig
 import com.silwek.limonade.viewmodels.SliceViewModel
 import com.silwek.limonade.viewmodels.getSliceViewModel
 
@@ -35,7 +35,12 @@ class FormActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
-        binding.sliceForm.buildForm(SliceConfigHub.getConfigs())
+        slicesViewModel.sliceConfigs.observe(this, this::onConfigs)
+    }
+
+    private fun onConfigs(sliceConfigs: List<SliceConfig>?) {
+        binding.sliceForm.buildForm(sliceConfigs?.map { it.getViewTypeBuilder() }
+            ?: emptyList())
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -44,6 +49,7 @@ class FormActivity : AppCompatActivity() {
                 finish()
                 super.onOptionsItemSelected(item)
             }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
